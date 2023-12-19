@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 import 'package:flutter_gradient_animation_text/flutter_gradient_animation_text.dart';
 import 'package:xml/xml.dart' as xml;
 import 'package:flutter/services.dart';
@@ -23,11 +22,18 @@ class Title {
 }
 
 class Dua {
+  final String duaTitle;
   final String id;
   final String arDua;
+  final String ref;
   final String enTranslation;
 
-  Dua({required this.id, required this.arDua, required this.enTranslation});
+  Dua(
+      {required this.duaTitle,
+      required this.id,
+      required this.arDua,
+      required this.ref,
+      required this.enTranslation});
 }
 
 class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
@@ -36,6 +42,8 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   List<Dua> duas = [];
   List<Dua> filteredDuas = [];
   String selectedTitleId = '';
+  String searchQuery = '';
+
   String bgImage = '';
   Color appprimaryColor = Colors.blue;
   Color accentColor = Colors.purple;
@@ -61,6 +69,23 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     setState(() {
       selectedTitleId = titleId;
     });
+  }
+
+  void updateSearchQuery(String query) {
+    setState(() {
+      searchQuery = query;
+    });
+  }
+
+  List<Title> getFilteredTitles() {
+    if (searchQuery.isEmpty) {
+      return titles;
+    } else {
+      return titles
+          .where((title) =>
+              title.title.toLowerCase().contains(searchQuery.toLowerCase()))
+          .toList();
+    }
   }
 
   void parseXmlData() {
@@ -3510,19 +3535,27 @@ Upon receiving bad news, say: (2) &apos;All Praise is for Allah in all circumsta
 </root>''';
     final document = xml.XmlDocument.parse(xmlData);
     for (var element in document.findAllElements('titlething')) {
-      final titleId = element.findElements('title_id').single.text;
-      final titleText = element.findElements('title').single.text;
+      final titleId = element.findElements('title_id').single.innerText;
+      final titleText = element.findElements('title').single.innerText;
 
       final title = Title(id: titleId, title: titleText);
       titles.add(title);
     }
 
     for (var element in document.findAllElements('dua')) {
-      final duaId = element.findElements('group_id').single.text;
-      final arDua = element.findElements('ar_dua').single.text;
-      final enTranslation = element.findElements('en_translation').single.text;
+      final ref = element.findElements('en_reference').single.innerText;
+      final duaId = element.findElements('group_id').single.innerText;
+      final arDua = element.findElements('ar_dua').single.innerText;
+      final duaTitle = element.findElements('subtitle').single.innerText;
+      final enTranslation =
+          element.findElements('en_translation').single.innerText;
 
-      final dua = Dua(id: duaId, arDua: arDua, enTranslation: enTranslation);
+      final dua = Dua(
+          duaTitle: duaTitle,
+          id: duaId,
+          arDua: arDua,
+          ref: ref,
+          enTranslation: enTranslation);
       duas.add(dua);
     }
   }
@@ -3548,9 +3581,9 @@ Upon receiving bad news, say: (2) &apos;All Praise is for Allah in all circumsta
       rgbEffectType = prefs.getBool('rgbEffectType') ?? rgbEffectType;
       appprimaryColor =
           Color(prefs.getInt('appprimaryColor') ?? appprimaryColor.value);
-      accentColor = Color(prefs.getInt('appprimaryColor') ?? accentColor.value);
+      accentColor = Color(prefs.getInt('accentColor') ?? accentColor.value);
       backgroundColor =
-          Color(prefs.getInt('appprimaryColor') ?? backgroundColor.value);
+          Color(prefs.getInt('backgroundColor') ?? backgroundColor.value);
       bgImage = prefs.getString('bgImage') ?? bgImage;
     });
   }
@@ -3579,12 +3612,15 @@ Upon receiving bad news, say: (2) &apos;All Praise is for Allah in all circumsta
   Widget build(BuildContext context) {
     final filteredDuas =
         duas.where((dua) => dua.id == selectedTitleId).toList();
+    final filteredTitles = getFilteredTitles();
 
     return MaterialApp(
         title: 'UI',
         theme: ThemeData(
             primaryColor: appprimaryColor,
             scaffoldBackgroundColor: backgroundColor,
+            inputDecorationTheme: InputDecorationTheme(
+                labelStyle: TextStyle(color: appprimaryColor)),
             textTheme: Theme.of(context).textTheme.apply(
                   bodyColor: appprimaryColor,
                   displayColor: appprimaryColor,
@@ -3636,16 +3672,23 @@ Upon receiving bad news, say: (2) &apos;All Praise is for Allah in all circumsta
                 ])),
             body: Column(
               children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    onChanged: updateSearchQuery,
+                    decoration: const InputDecoration(
+                      labelText: 'Search',
+                    ),
+                  ),
+                ),
                 if (selectedTitleId.isEmpty)
                   Expanded(
                     child: ListView.builder(
-                      itemCount: titles.length,
+                      itemCount: filteredTitles.length,
                       itemBuilder: (context, index) {
-                        final title = titles[index];
+                        final title = filteredTitles[index];
                         return ListTile(
-                          title: _isRGBEnabled
-                              ? getRGBtext(title.title)
-                              : Text(title.title),
+                          title: getText(title.title),
                           onTap: () {
                             selectTitle(title.id);
                           },
@@ -3660,10 +3703,9 @@ Upon receiving bad news, say: (2) &apos;All Praise is for Allah in all circumsta
                       itemBuilder: (context, index) {
                         final dua = filteredDuas[index];
                         return ListTile(
-                          title: _isRGBEnabled
-                              ? getRGBtext(dua.arDua)
-                              : Text(dua.arDua),
-                          subtitle: Text(dua.enTranslation),
+                          title: getText(dua.duaTitle),
+                          subtitle: getText(
+                              '${dua.arDua}\n${dua.enTranslation}\n\n${dua.ref}'),
                         );
                       },
                     ),
@@ -3732,17 +3774,12 @@ Upon receiving bad news, say: (2) &apos;All Praise is for Allah in all circumsta
                   });
                 });
               }, 'Select'),
-              getMenuItem(useImageBG ? 'Background Image' : 'Background Color',
-                  () {
-                useImageBG
-                    ? _pickBackgroundImage
-                    : () {
-                        _openColorPicker(backgroundColor, (Color newColor) {
-                          setState(() {
-                            backgroundColor = newColor;
-                          });
-                        });
-                      };
+              getMenuItem('Background Color', () {
+                _openColorPicker(backgroundColor, (Color newColor) {
+                  setState(() {
+                    backgroundColor = newColor;
+                  });
+                });
               }, 'Select'),
               getMenuItem('Accent Color', () {
                 _openColorPicker(accentColor, (Color newColor) {
@@ -3796,33 +3833,38 @@ Upon receiving bad news, say: (2) &apos;All Praise is for Allah in all circumsta
     });
   }
 
-  Widget getRGBtext(String text) {
-    if (_isRGBEnabled) _controller.repeat();
-    return rgbEffectType
-        ? AnimatedBuilder(
-            animation: _controller,
-            builder: (BuildContext context, Widget? child) {
-              return Text(text,
-                  style: TextStyle(color: getRGB(), fontSize: _fontSize));
-            },
-          )
-        : GradientAnimationText(
-            text: Text(
-              text,
-              style: TextStyle(
-                fontSize: _fontSize,
-              ),
-            ),
-            colors: const [
-              Color(0xff8f00ff), // violet
-              Colors.indigo,
-              Colors.blue,
-              Colors.green,
-              Colors.yellow,
-              Colors.orange,
-              Colors.red,
-            ],
-            duration: const Duration(seconds: 5),
+  Widget getText(String text) {
+    if (_isRGBEnabled && !_controller.isAnimating) _controller.repeat();
+    return _isRGBEnabled
+        ? rgbEffectType
+            ? AnimatedBuilder(
+                animation: _controller,
+                builder: (BuildContext context, Widget? child) {
+                  return Text(text,
+                      style: TextStyle(color: getRGB(), fontSize: _fontSize));
+                },
+              )
+            : GradientAnimationText(
+                text: Text(
+                  text,
+                  style: TextStyle(
+                    fontSize: _fontSize,
+                  ),
+                ),
+                colors: const [
+                  Color(0xff8f00ff), // violet
+                  Colors.indigo,
+                  Colors.blue,
+                  Colors.green,
+                  Colors.yellow,
+                  Colors.orange,
+                  Colors.red,
+                ],
+                duration: const Duration(seconds: 5),
+              )
+        : Text(
+            text,
+            style: TextStyle(fontSize: _fontSize),
           );
   }
 
