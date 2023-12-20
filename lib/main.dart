@@ -25,24 +25,30 @@ class Title {
 
 class Dua {
   final String duaTitle;
+  final String titleID;
   final String id;
   final String arDua;
   final String ref;
   final String enTranslation;
+  bool isFavorite;
 
   Dua(
       {required this.duaTitle,
+      required this.titleID,
       required this.id,
       required this.arDua,
       required this.ref,
-      required this.enTranslation});
+      required this.enTranslation,
+      this.isFavorite = false});
 }
 
 class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   List<Title> titles = [];
   List<Dua> duas = [];
   List<Dua> filteredDuas = [];
-  String selectedTitleId = '';
+  List<Dua> favoriteDuas = [];
+  List<String> favs = [];
+  String _selectedTitleId = '';
   String searchQuery = '';
   int _rgbSpeed = 5;
   String bgImage = '';
@@ -54,6 +60,7 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   bool _isRGBEnabled = false;
   bool rgbEffectType = false;
   bool _autoSave = false;
+  bool _showFavs = false;
   Future<String> loadAsset() async {
     return await rootBundle.loadString('hisnul.xml');
   }
@@ -65,7 +72,7 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
 
   void selectTitle(String titleId) {
     setState(() {
-      selectedTitleId = titleId;
+      _selectedTitleId = titleId;
     });
   }
 
@@ -2870,669 +2877,669 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
       <audio></audio>
     </dua>
     <titlething>
-      <title_id>1</title_id>
+      <titleID>1</titleID>
       <title>Upon waking up</title>
       <category_id>2</category_id>
     </titlething>
     <titlething>
-      <title_id>2</title_id>
+      <titleID>2</titleID>
       <title>Supplication when wearing clothes</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>3</title_id>
+      <titleID>3</titleID>
       <title>Supplication when wearing new clothes</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>4</title_id>
+      <titleID>4</titleID>
       <title>Supplication said to someone wearing new clothes</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>5</title_id>
+      <titleID>5</titleID>
       <title>Before Undressing</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>6</title_id>
+      <titleID>6</titleID>
       <title>Before entering the toilet</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>7</title_id>
+      <titleID>7</titleID>
       <title>After leaving the toilet</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>8</title_id>
+      <titleID>8</titleID>
       <title>When starting ablution (wudu&apos;)</title>
       <category_id>5</category_id>
     </titlething>
     <titlething>
-      <title_id>9</title_id>
+      <titleID>9</titleID>
       <title>Upon completing ablution (wudu&apos;)</title>
       <category_id>5</category_id>
     </titlething>
     <titlething>
-      <title_id>10</title_id>
+      <titleID>10</titleID>
       <title>When leaving home</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>11</title_id>
+      <titleID>11</titleID>
       <title>Upon entering home</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>12</title_id>
+      <titleID>12</titleID>
       <title>Supplication when going to the masjid</title>
       <category_id>5</category_id>
     </titlething>
     <titlething>
-      <title_id>13</title_id>
+      <titleID>13</titleID>
       <title>Upon entering the masjid</title>
       <category_id>5</category_id>
     </titlething>
     <titlething>
-      <title_id>14</title_id>
+      <titleID>14</titleID>
       <title>Upon leaving the masjid</title>
       <category_id>5</category_id>
     </titlething>
     <titlething>
-      <title_id>15</title_id>
+      <titleID>15</titleID>
       <title>Supplications related to the Athân (call to prayer)</title>
       <category_id>5</category_id>
     </titlething>
     <titlething>
-      <title_id>16</title_id>
+      <titleID>16</titleID>
       <title>Supplications at the start of Ŝalâh (prayer)</title>
       <category_id>5</category_id>
     </titlething>
     <titlething>
-      <title_id>17</title_id>
+      <titleID>17</titleID>
       <title>While bowing in Ŝalâh (Rukû&apos;)</title>
       <category_id>5</category_id>
     </titlething>
     <titlething>
-      <title_id>18</title_id>
+      <titleID>18</titleID>
       <title>Upon rising from Rukû&apos; (bowing position in Ŝalâh)</title>
       <category_id>5</category_id>
     </titlething>
     <titlething>
-      <title_id>19</title_id>
+      <titleID>19</titleID>
       <title>Supplications while in Sujûd (prostration in Ŝalâh)</title>
       <category_id>5</category_id>
     </titlething>
     <titlething>
-      <title_id>20</title_id>
+      <titleID>20</titleID>
       <title>Supplications between sajdatain (two prostrations)</title>
       <category_id>5</category_id>
     </titlething>
     <titlething>
-      <title_id>21</title_id>
+      <titleID>21</titleID>
       <title>Supplication for Sajdah (prostration) due to recitation of Qur&apos;an</title>
       <category_id>5</category_id>
     </titlething>
     <titlething>
-      <title_id>22</title_id>
+      <titleID>22</titleID>
       <title>Dua of Tashahhud</title>
       <category_id>5</category_id>
     </titlething>
     <titlething>
-      <title_id>23</title_id>
+      <titleID>23</titleID>
       <title>Dua for the Prophet (salla Allaahu ʻalayhi wa salaam) after the Tashahhud</title>
       <category_id>5</category_id>
     </titlething>
     <titlething>
-      <title_id>24</title_id>
+      <titleID>24</titleID>
       <title>Supplication to be said after the last Tashahhud and before the Taslîm</title>
       <category_id>5</category_id>
     </titlething>
     <titlething>
-      <title_id>25</title_id>
+      <titleID>25</titleID>
       <title>Remembrance after the Taslîm</title>
       <category_id>5</category_id>
     </titlething>
     <titlething>
-      <title_id>26</title_id>
+      <titleID>26</titleID>
       <title>Supplication for seeking guidance in forming a decision or choosing the proper course, etc..(Al-&apos;Istikhârah)</title>
       <category_id>7</category_id>
     </titlething>
     <titlething>
-      <title_id>27</title_id>
+      <titleID>27</titleID>
       <title>Remembrance said in the morning and evening</title>
       <category_id>2</category_id>
     </titlething>
     <titlething>
-      <title_id>28</title_id>
+      <titleID>28</titleID>
       <title>Remembrance before sleeping</title>
       <category_id>2</category_id>
     </titlething>
     <titlething>
-      <title_id>29</title_id>
+      <titleID>29</titleID>
       <title>Supplication when turning over during the night</title>
       <category_id>2</category_id>
     </titlething>
     <titlething>
-      <title_id>30</title_id>
+      <titleID>30</titleID>
       <title>Upon experiencing unrest, fear, apprehensiveness and the like during sleep</title>
       <category_id>2</category_id>
     </titlething>
     <titlething>
-      <title_id>31</title_id>
+      <titleID>31</titleID>
       <title>Upon seeing a bad dream</title>
       <category_id>2</category_id>
     </titlething>
     <titlething>
-      <title_id>32</title_id>
+      <titleID>32</titleID>
       <title>Du&apos;â Qunût Al-Witr </title>
       <category_id>5</category_id>
     </titlething>
     <titlething>
-      <title_id>33</title_id>
+      <titleID>33</titleID>
       <title>Remembrance immediately after the Taslîm of the Witr Ŝalâh</title>
       <category_id>5</category_id>
     </titlething>
     <titlething>
-      <title_id>34</title_id>
+      <titleID>34</titleID>
       <title>Supplication for anxiety and sorrow</title>
       <category_id>6</category_id>
     </titlething>
     <titlething>
-      <title_id>35</title_id>
+      <titleID>35</titleID>
       <title>Supplication for one in distress</title>
       <category_id>6</category_id>
     </titlething>
     <titlething>
-      <title_id>36</title_id>
+      <titleID>36</titleID>
       <title>Upon encountering an enemy or those of authority</title>
       <category_id>7</category_id>
     </titlething>
     <titlething>
-      <title_id>37</title_id>
+      <titleID>37</titleID>
       <title>For fear of the opression of rulers</title>
       <category_id>7</category_id>
     </titlething>
     <titlething>
-      <title_id>38</title_id>
+      <titleID>38</titleID>
       <title>Against enemies</title>
       <category_id>7</category_id>
     </titlething>
     <titlething>
-      <title_id>39</title_id>
+      <titleID>39</titleID>
       <title>When afraid of a group people</title>
       <category_id>7</category_id>
     </titlething>
     <titlething>
-      <title_id>40</title_id>
+      <titleID>40</titleID>
       <title>Supplication for one afflicted with doubt in his faith</title>
       <category_id>7</category_id>
     </titlething>
     <titlething>
-      <title_id>41</title_id>
+      <titleID>41</titleID>
       <title>Settling a debt</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>42</title_id>
+      <titleID>42</titleID>
       <title>Supplication for one afflicted by whisperings in prayer or recitation</title>
       <category_id>7</category_id>
     </titlething>
     <titlething>
-      <title_id>43</title_id>
+      <titleID>43</titleID>
       <title>Supplication for one whose affairs have become difficult</title>
       <category_id>6</category_id>
     </titlething>
     <titlething>
-      <title_id>44</title_id>
+      <titleID>44</titleID>
       <title>Upon committing a sin</title>
       <category_id>7</category_id>
     </titlething>
     <titlething>
-      <title_id>45</title_id>
+      <titleID>45</titleID>
       <title>Supplications for expelling the devil and his whisperings</title>
       <category_id>7</category_id>
     </titlething>
     <titlething>
-      <title_id>46</title_id>
+      <titleID>46</titleID>
       <title>Supplication when stricken with a mishap or overtaken by an affair</title>
       <category_id>6</category_id>
     </titlething>
     <titlething>
-      <title_id>47</title_id>
+      <titleID>47</titleID>
       <title>Congratulations on the occasion of a birth</title>
       <category_id>3</category_id>
     </titlething>
     <titlething>
-      <title_id>48</title_id>
+      <titleID>48</titleID>
       <title>Placing children under Allah&apos;s protection</title>
       <category_id>3</category_id>
     </titlething>
     <titlething>
-      <title_id>49</title_id>
+      <titleID>49</titleID>
       <title>When visiting the sick</title>
       <category_id>8</category_id>
     </titlething>
     <titlething>
-      <title_id>50</title_id>
+      <titleID>50</titleID>
       <title>Excellence of visiting the sick</title>
       <category_id>8</category_id>
     </titlething>
     <titlething>
-      <title_id>51</title_id>
+      <titleID>51</titleID>
       <title>Supplication of the sick who have renounced all hope of life</title>
       <category_id>8</category_id>
     </titlething>
     <titlething>
-      <title_id>52</title_id>
+      <titleID>52</titleID>
       <title>Instruction for the one nearing death</title>
       <category_id>8</category_id>
     </titlething>
     <titlething>
-      <title_id>53</title_id>
+      <titleID>53</titleID>
       <title>Supplication for one afflicted by a calamity</title>
       <category_id>6</category_id>
     </titlething>
     <titlething>
-      <title_id>54</title_id>
+      <titleID>54</titleID>
       <title>When closing the eyes of the deceased</title>
       <category_id>8</category_id>
     </titlething>
     <titlething>
-      <title_id>55</title_id>
+      <titleID>55</titleID>
       <title>Supplication for the deceased at the funeral prayer</title>
       <category_id>8</category_id>
     </titlething>
     <titlething>
-      <title_id>56</title_id>
+      <titleID>56</titleID>
       <title>Supplication for the deceased child at the funeral prayer</title>
       <category_id>8</category_id>
     </titlething>
     <titlething>
-      <title_id>57</title_id>
+      <titleID>57</titleID>
       <title>Condolence</title>
       <category_id>8</category_id>
     </titlething>
     <titlething>
-      <title_id>58</title_id>
+      <titleID>58</titleID>
       <title>Placing the deceased in the grave</title>
       <category_id>8</category_id>
     </titlething>
     <titlething>
-      <title_id>59</title_id>
+      <titleID>59</titleID>
       <title>After burying the deceased</title>
       <category_id>8</category_id>
     </titlething>
     <titlething>
-      <title_id>60</title_id>
+      <titleID>60</titleID>
       <title>Visiting the graves</title>
       <category_id>8</category_id>
     </titlething>
     <titlething>
-      <title_id>61</title_id>
+      <titleID>61</titleID>
       <title>Prayer said during a wind storm</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>62</title_id>
+      <titleID>62</titleID>
       <title>Supplication upon hearing thunder</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>63</title_id>
+      <titleID>63</titleID>
       <title>Supplication for rain</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>64</title_id>
+      <titleID>64</titleID>
       <title>Supplication when it is raining</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>65</title_id>
+      <titleID>65</titleID>
       <title>Supplication after rain</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>66</title_id>
+      <titleID>66</titleID>
       <title>Asking for clear skies</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>67</title_id>
+      <titleID>67</titleID>
       <title>Upon sighting the crescent moon</title>
       <category_id>4</category_id>
     </titlething>
     <titlething>
-      <title_id>68</title_id>
+      <titleID>68</titleID>
       <title>Upon breaking fast</title>
       <category_id>4</category_id>
     </titlething>
     <titlething>
-      <title_id>69</title_id>
+      <titleID>69</titleID>
       <title>Supplication before eating</title>
       <category_id>4</category_id>
     </titlething>
     <titlething>
-      <title_id>70</title_id>
+      <titleID>70</titleID>
       <title>Upon completion of a meal</title>
       <category_id>4</category_id>
     </titlething>
     <titlething>
-      <title_id>71</title_id>
+      <titleID>71</titleID>
       <title>Supplication of the guest for the host</title>
       <category_id>3</category_id>
     </titlething>
     <titlething>
-      <title_id>72</title_id>
+      <titleID>72</titleID>
       <title>Supplication said to one offering a drink or to one who intended to do that</title>
       <category_id>3</category_id>
     </titlething>
     <titlething>
-      <title_id>73</title_id>
+      <titleID>73</titleID>
       <title>Supplication said when breaking fast in someone&apos;s home</title>
       <category_id>4</category_id>
     </titlething>
     <titlething>
-      <title_id>74</title_id>
+      <titleID>74</titleID>
       <title>Supplication said by one fasting when presented with food and does not break his fast</title>
       <category_id>4</category_id>
     </titlething>
     <titlething>
-      <title_id>75</title_id>
+      <titleID>75</titleID>
       <title>If insulted while fasting</title>
       <category_id>4</category_id>
     </titlething>
     <titlething>
-      <title_id>76</title_id>
+      <titleID>76</titleID>
       <title>Supplication said upon seeing the early or premature fruit</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>77</title_id>
+      <titleID>77</titleID>
       <title>Supplication said upon sneezing</title>
       <category_id>3</category_id>
     </titlething>
     <titlething>
-      <title_id>78</title_id>
+      <titleID>78</titleID>
       <title>What to say to a kâfir who praises Allah after sneezing</title>
       <category_id>3</category_id>
     </titlething>
     <titlething>
-      <title_id>79</title_id>
+      <titleID>79</titleID>
       <title>Supplication said to the newly wed</title>
       <category_id>3</category_id>
     </titlething>
     <titlething>
-      <title_id>80</title_id>
+      <titleID>80</titleID>
       <title>The groom&apos;s supplication on the wedding night or when buying an animal</title>
       <category_id>3</category_id>
     </titlething>
     <titlething>
-      <title_id>81</title_id>
+      <titleID>81</titleID>
       <title>Supplication before sexual intercourse</title>
       <category_id>3</category_id>
     </titlething>
     <titlething>
-      <title_id>82</title_id>
+      <titleID>82</titleID>
       <title>When angry</title>
       <category_id>6</category_id>
     </titlething>
     <titlething>
-      <title_id>83</title_id>
+      <titleID>83</titleID>
       <title>Supplication said upon seeing someone in trial or tribulation</title>
       <category_id>6</category_id>
     </titlething>
     <titlething>
-      <title_id>84</title_id>
+      <titleID>84</titleID>
       <title>Remembrance said at a sitting or gathering, etc...</title>
       <category_id>3</category_id>
     </titlething>
     <titlething>
-      <title_id>85</title_id>
+      <titleID>85</titleID>
       <title>Supplication for the expiation of sins said at the conclusion of a sitting or gathering, etc...</title>
       <category_id>3</category_id>
     </titlething>
     <titlething>
-      <title_id>86</title_id>
+      <titleID>86</titleID>
       <title>Replying to a supplication of forgiveness</title>
       <category_id>3</category_id>
     </titlething>
     <titlething>
-      <title_id>87</title_id>
+      <titleID>87</titleID>
       <title>Supplication said to one who does you a favor</title>
       <category_id>3</category_id>
     </titlething>
     <titlething>
-      <title_id>88</title_id>
+      <titleID>88</titleID>
       <title>Protection from the Dajjâl</title>
       <category_id>7</category_id>
     </titlething>
     <titlething>
-      <title_id>89</title_id>
+      <titleID>89</titleID>
       <title>Supplication said to one who pronounces his love for you, for Allah&apos;s sake</title>
       <category_id>3</category_id>
     </titlething>
     <titlething>
-      <title_id>90</title_id>
+      <titleID>90</titleID>
       <title>Supplication said to one who has offered you some of his wealth</title>
       <category_id>3</category_id>
     </titlething>
     <titlething>
-      <title_id>91</title_id>
+      <titleID>91</titleID>
       <title>Supplication said to the debtor when his debt is settled</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>92</title_id>
+      <titleID>92</titleID>
       <title>Supplication for fear of Shirk</title>
       <category_id>7</category_id>
     </titlething>
     <titlething>
-      <title_id>93</title_id>
+      <titleID>93</titleID>
       <title>Returning a supplication after having bestowed a gift or charity upon someone</title>
       <category_id>3</category_id>
     </titlething>
     <titlething>
-      <title_id>94</title_id>
+      <titleID>94</titleID>
       <title>Forbiddance of ascribing things to omens</title>
       <category_id>7</category_id>
     </titlething>
     <titlething>
-      <title_id>95</title_id>
+      <titleID>95</titleID>
       <title>Supplication said when mounting an animal or any means of transport</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>96</title_id>
+      <titleID>96</titleID>
       <title>Supplication for travel</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>97</title_id>
+      <titleID>97</titleID>
       <title>Supplication upon entering a town or village, etc...</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>98</title_id>
+      <titleID>98</titleID>
       <title>When entering the market</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>99</title_id>
+      <titleID>99</titleID>
       <title>Supplication for when the mounted animal (or means of transport) stumbles</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>100</title_id>
+      <titleID>100</titleID>
       <title>Supplication of the traveller for the resident</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>101</title_id>
+      <titleID>101</titleID>
       <title>Supplication of the resident for the traveller</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>102</title_id>
+      <titleID>102</titleID>
       <title>Remembrance while ascending or descending</title>
       <category_id>2</category_id>
     </titlething>
     <titlething>
-      <title_id>103</title_id>
+      <titleID>103</titleID>
       <title>Prayer of the traveller as dawn approaches</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>104</title_id>
+      <titleID>104</titleID>
       <title>Stopping or lodging somewhere</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>105</title_id>
+      <titleID>105</titleID>
       <title>While returning from travel</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>106</title_id>
+      <titleID>106</titleID>
       <title>Supplication after receiving good or bad news</title>
       <category_id>6</category_id>
     </titlething>
     <titlething>
-      <title_id>107</title_id>
+      <titleID>107</titleID>
       <title>Excellence of sending prayers upon the Prophet (May Allah send blessings and peace upon him)</title>
       <category_id>2</category_id>
     </titlething>
     <titlething>
-      <title_id>108</title_id>
+      <titleID>108</titleID>
       <title>Excellence of spreading the Islamic greeting</title>
       <category_id>3</category_id>
     </titlething>
     <titlething>
-      <title_id>109</title_id>
+      <titleID>109</titleID>
       <title>How to reply to the Salâm of a Kâfir</title>
       <category_id>3</category_id>
     </titlething>
     <titlething>
-      <title_id>110</title_id>
+      <titleID>110</titleID>
       <title>Supplication after hearing a rooster crow or a donkey bray</title>
       <category_id>1</category_id>
     </titlething>
     <titlething>
-      <title_id>111</title_id>
+      <titleID>111</titleID>
       <title>Supplication upon hearing the barking of dogs at night</title>
       <category_id>2</category_id>
     </titlething>
     <titlething>
-      <title_id>112</title_id>
+      <titleID>112</titleID>
       <title>Supplication said for one you have insulted</title>
       <category_id>6</category_id>
     </titlething>
     <titlething>
-      <title_id>113</title_id>
+      <titleID>113</titleID>
       <title>The etiquette of praising a fellow Muslim</title>
       <category_id>3</category_id>
     </titlething>
     <titlething>
-      <title_id>114</title_id>
+      <titleID>114</titleID>
       <title>For the one that has been praised</title>
       <category_id>3</category_id>
     </titlething>
     <titlething>
-      <title_id>115</title_id>
+      <titleID>115</titleID>
       <title>The Talbiyah for the one doing Ĥajj or &apos;Umra</title>
       <category_id>4</category_id>
     </titlething>
     <titlething>
-      <title_id>116</title_id>
+      <titleID>116</titleID>
       <title>The Takbîr passing the black stone</title>
       <category_id>4</category_id>
     </titlething>
     <titlething>
-      <title_id>117</title_id>
+      <titleID>117</titleID>
       <title>Between the Yemeni corner and the black stone</title>
       <category_id>4</category_id>
     </titlething>
     <titlething>
-      <title_id>118</title_id>
+      <titleID>118</titleID>
       <title>When at Mount Ŝaffâ and Mount Marwah</title>
       <category_id>4</category_id>
     </titlething>
     <titlething>
-      <title_id>119</title_id>
+      <titleID>119</titleID>
       <title>On the Day of &apos;Arafah</title>
       <category_id>4</category_id>
     </titlething>
     <titlething>
-      <title_id>120</title_id>
+      <titleID>120</titleID>
       <title>At the Sacred Site (Al-Mash&apos;ar Al-Harâm)</title>
       <category_id>4</category_id>
     </titlething>
     <titlething>
-      <title_id>121</title_id>
+      <titleID>121</titleID>
       <title>Supplication for throwing a pebble at the Jamarât</title>
       <category_id>4</category_id>
     </titlething>
     <titlething>
-      <title_id>122</title_id>
+      <titleID>122</titleID>
       <title>What to say at times of amazement and delight</title>
       <category_id>6</category_id>
     </titlething>
     <titlething>
-      <title_id>123</title_id>
+      <titleID>123</titleID>
       <title>What to do upon receiving pleasant news</title>
       <category_id>6</category_id>
     </titlething>
     <titlething>
-      <title_id>124</title_id>
+      <titleID>124</titleID>
       <title>What to say and do when feeling some pain in the body</title>
       <category_id>8</category_id>
     </titlething>
     <titlething>
-      <title_id>125</title_id>
+      <titleID>125</titleID>
       <title>What to say when in fear of afflicting something or someone with one&apos;s eye</title>
       <category_id>7</category_id>
     </titlething>
     <titlething>
-      <title_id>126</title_id>
+      <titleID>126</titleID>
       <title>What to say when startled</title>
       <category_id>6</category_id>
     </titlething>
     <titlething>
-      <title_id>127</title_id>
+      <titleID>127</titleID>
       <title>When slaughtering or offering a sacrifice</title>
       <category_id>4</category_id>
     </titlething>
     <titlething>
-      <title_id>128</title_id>
+      <titleID>128</titleID>
       <title>What is said to ward off the deception of the Obstinate Shaytaans</title>
       <category_id>7</category_id>
     </titlething>
     <titlething>
-      <title_id>129</title_id>
+      <titleID>129</titleID>
       <title>Seeking forgiveness and repentance</title>
       <category_id>7</category_id>
     </titlething>
     <titlething>
-      <title_id>130</title_id>
+      <titleID>130</titleID>
       <title>Excellence of At-Tasbîĥ, At-Taĥmîd, At-Tahlîl and At-Takbîr</title>
       <category_id>2</category_id>
     </titlething>
     <titlething>
-      <title_id>131</title_id>
+      <titleID>131</titleID>
       <title>How the Prophet (salla Allaahu ʻalayhi wa salaam) made tasbîĥ?</title>
       <category_id>2</category_id>
     </titlething>
     <titlething>
-      <title_id>132</title_id>
+      <titleID>132</titleID>
       <title>General and beneficent rules</title>
       <category_id>2</category_id>
     </titlething>
   </root>''';
     final document = xml.XmlDocument.parse(xmlData);
     for (var element in document.findAllElements('titlething')) {
-      final titleId = element.findElements('title_id').single.innerText;
+      final titleId = element.findElements('titleID').single.innerText;
       final titleText = element.findElements('title').single.innerText;
 
       final title = Title(id: titleId, title: titleText);
@@ -3541,7 +3548,8 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
 
     for (var element in document.findAllElements('dua')) {
       final ref = element.findElements('en_reference').single.innerText;
-      final duaId = element.findElements('group_id').single.innerText;
+      final duaTitleID = element.findElements('group_id').single.innerText;
+      final duaID = element.findElements('id').single.innerText;
       final arDua = element.findElements('ar_dua').single.innerText;
       final duaTitle = element.findElements('subtitle').single.innerText;
       final enTranslation =
@@ -3549,7 +3557,8 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
 
       final dua = Dua(
           duaTitle: duaTitle,
-          id: duaId,
+          titleID: duaTitleID,
+          id: duaID,
           arDua: arDua,
           ref: ref,
           enTranslation: enTranslation);
@@ -3568,6 +3577,7 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     prefs.setInt('backgroundColor', backgroundColor.value);
     prefs.setInt('rgbSpeed', _rgbSpeed);
     prefs.setString('bgImage', bgImage);
+    prefs.setStringList('favorites', favs);
   }
 
   void _loadSettings() async {
@@ -3584,6 +3594,11 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
           Color(prefs.getInt('backgroundColor') ?? backgroundColor.value);
       _rgbSpeed = prefs.getInt('rgbSpeed') ?? _rgbSpeed;
       bgImage = prefs.getString('bgImage') ?? bgImage;
+      favs = prefs.getStringList('favorites') ?? favs;
+      for (int i = 0; i < favs.length; i++) {
+        duas.where((dua) => dua.id == favs[i]).forEach(favoriteDuas
+            .add); // this is probably awfully inefficient but it works
+      }
     });
   }
 
@@ -3610,7 +3625,8 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final filteredDuas =
-        duas.where((dua) => dua.id == selectedTitleId).toList();
+        duas.where((dua) => dua.titleID == _selectedTitleId).toList();
+
     final filteredTitles = getFilteredTitles();
 
     return MaterialApp(
@@ -3649,6 +3665,11 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                       _autoSave = !_autoSave;
                     });
                   }),
+                  getDrawerOption('Show Favorites', () {
+                    setState(() {
+                      _showFavs = !_showFavs;
+                    });
+                  }),
                   getDrawerOption('Save Settings', () {
                     _saveSettings();
                   }),
@@ -3672,7 +3693,31 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                     ),
                   ),
                 ),
-                if (selectedTitleId.isEmpty)
+                if (_showFavs)
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: favoriteDuas.length,
+                      itemBuilder: (context, index) {
+                        final dua = favoriteDuas[index];
+                        return ListTile(
+                          minVerticalPadding: 10,
+                          title: getText(dua.duaTitle, context),
+                          subtitle: getText(
+                              '${dua.arDua}\n${dua.enTranslation}\n\n${dua.ref}',
+                              context,
+                              accentColor),
+                          trailing: IconButton(
+                              icon: const Icon(Icons.share),
+                              color: appprimaryColor,
+                              onPressed: () {
+                                Share.share(
+                                    '${dua.duaTitle}\n${dua.arDua}\n${dua.enTranslation}\n\n${dua.ref}');
+                              }),
+                        );
+                      },
+                    ),
+                  ),
+                if (_selectedTitleId.isEmpty && !_showFavs)
                   Expanded(
                     child: ListView.builder(
                       itemCount: filteredTitles.length,
@@ -3688,39 +3733,57 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                       },
                     ),
                   ),
-                if (selectedTitleId.isNotEmpty)
+                if (_selectedTitleId.isNotEmpty && !_showFavs)
                   Expanded(
                     child: ListView.builder(
                       itemCount: filteredDuas.length,
                       itemBuilder: (context, index) {
                         final dua = filteredDuas[index];
                         return ListTile(
-                          minVerticalPadding: 10,
-                          title: getText(dua.duaTitle, context),
-                          subtitle: getText(
-                              '${dua.arDua}\n${dua.enTranslation}\n\n${dua.ref}',
-                              context,
-                              accentColor),
-                          trailing: IconButton(
-                              iconSize: 20,
-                              icon: const Icon(Icons.share),
-                              color: appprimaryColor,
-                              onPressed: () {
-                                Share.share(
-                                    '${dua.duaTitle}\n${dua.arDua}\n${dua.enTranslation}\n\n${dua.ref}');
-                              }),
-                        );
+                            minVerticalPadding: 10,
+                            title: getText(dua.duaTitle, context),
+                            subtitle: getText(
+                                '${dua.arDua}\n${dua.enTranslation}\n\n${dua.ref}',
+                                context,
+                                accentColor),
+                            trailing: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                    icon: const Icon(Icons.share),
+                                    color: appprimaryColor,
+                                    onPressed: () {
+                                      Share.share(
+                                          '${dua.duaTitle}\n${dua.arDua}\n${dua.enTranslation}\n\n${dua.ref}');
+                                    }),
+                                IconButton(
+                                    icon: Icon(dua.isFavorite
+                                        ? Icons.favorite
+                                        : Icons.favorite_border),
+                                    color: appprimaryColor,
+                                    onPressed: () {
+                                      setState(() {
+                                        dua.isFavorite = !dua.isFavorite;
+                                        if (dua.isFavorite) {
+                                          favs.add(dua.id);
+                                          favoriteDuas.add(dua);
+                                        } else
+                                          favs.remove(dua.id);
+                                      });
+                                    }),
+                              ],
+                            ));
                       },
                     ),
                   ),
-                if (selectedTitleId.isNotEmpty)
+                if (_selectedTitleId.isNotEmpty || _showFavs)
                   IconButton(
                       iconSize: 100,
                       icon: const Icon(Icons.arrow_back),
                       color: appprimaryColor,
                       onPressed: () {
                         setState(() {
-                          selectedTitleId = '';
+                          _showFavs ? _showFavs = false : _selectedTitleId = '';
                         });
                       })
               ],
