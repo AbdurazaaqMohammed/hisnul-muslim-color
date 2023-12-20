@@ -3700,20 +3700,38 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                       itemBuilder: (context, index) {
                         final dua = favoriteDuas[index];
                         return ListTile(
-                          minVerticalPadding: 10,
-                          title: getText(dua.duaTitle, context),
-                          subtitle: getText(
-                              '${dua.arDua}\n${dua.enTranslation}\n\n${dua.ref}',
-                              context,
-                              accentColor),
-                          trailing: IconButton(
-                              icon: const Icon(Icons.share),
-                              color: appprimaryColor,
-                              onPressed: () {
-                                Share.share(
-                                    '${dua.duaTitle}\n${dua.arDua}\n${dua.enTranslation}\n\n${dua.ref}');
-                              }),
-                        );
+                            minVerticalPadding: 10,
+                            title: getText(dua.duaTitle, context),
+                            subtitle: getText(
+                                '${dua.arDua}\n${dua.enTranslation}\n\n${dua.ref}',
+                                context,
+                                accentColor),
+                            trailing: Wrap(
+                              children: [
+                                IconButton(
+                                    icon: const Icon(Icons.share),
+                                    color: appprimaryColor,
+                                    onPressed: () {
+                                      Share.share(
+                                          '${dua.duaTitle}\n${dua.arDua}\n${dua.enTranslation}\n\n${dua.ref}');
+                                    }),
+                                IconButton(
+                                    icon: Icon(dua.isFavorite
+                                        ? Icons.favorite
+                                        : Icons.favorite_border),
+                                    color: appprimaryColor,
+                                    onPressed: () {
+                                      setState(() {
+                                        dua.isFavorite = !dua.isFavorite;
+                                        if (dua.isFavorite) {
+                                          favs.add(dua.id);
+                                          favoriteDuas.add(dua);
+                                        } else
+                                          favs.remove(dua.id);
+                                      });
+                                    }),
+                              ],
+                            ));
                       },
                     ),
                   ),
@@ -3746,8 +3764,7 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                                 '${dua.arDua}\n${dua.enTranslation}\n\n${dua.ref}',
                                 context,
                                 accentColor),
-                            trailing: Column(
-                              mainAxisSize: MainAxisSize.min,
+                            trailing: Wrap(
                               children: [
                                 IconButton(
                                     icon: const Icon(Icons.share),
