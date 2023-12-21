@@ -3733,6 +3733,7 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                                           favoriteDuas.add(dua);
                                         } else
                                           favs.remove(dua.id);
+                                        favoriteDuas.remove(dua);
                                       });
                                     }),
                               ],
