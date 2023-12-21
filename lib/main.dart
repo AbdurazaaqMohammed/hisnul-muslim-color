@@ -3566,6 +3566,11 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     }
   }
 
+  void _saveFavs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList('favorites', favs);
+  }
+
   void _saveSettings() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('rgb', _isRGBEnabled);
@@ -3577,7 +3582,6 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     prefs.setInt('backgroundColor', backgroundColor.value);
     prefs.setInt('rgbSpeed', _rgbSpeed);
     prefs.setString('bgImage', bgImage);
-    prefs.setStringList('favorites', favs);
   }
 
   void _loadSettings() async {
@@ -3618,6 +3622,7 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   @override
   void dispose() {
     if (_autoSave) _saveSettings();
+    _saveFavs();
     _controller.dispose();
     super.dispose();
   }
